@@ -42,8 +42,8 @@ module CampfireRepl
       output "Successfully joined room #{current_room.name}."
     end
 
-    def listen handler
-      current_room.listen(handler) do |m|
+    def listen
+      current_room.listen do |m|
         messages.process_messages [m]
       end
     end

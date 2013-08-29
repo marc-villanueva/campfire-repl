@@ -2,7 +2,6 @@
 
 require 'campfire_repl'
 require 'time'  # tinder gem fails to require this in its room#recent method
-require 'eventmachine'
 
 class MyApp
   attr_reader :campfire
@@ -17,11 +16,7 @@ class MyApp
     command = command.to_sym
 
     if campfire.respond_to? command
-      if command == :listen
-        campfire.listen KeyboardHandler
-      else
-        campfire.send(command, *params)
-      end
+      campfire.send(command, *params)
     else
       puts "Unknown command: #{command}"
     end
@@ -36,14 +31,6 @@ class MyApp
     loop do
       repl[">> "]
     end
-  end
-end
-
-module KeyboardHandler
-  include EM::Protocols::LineText2
-
-  def receive_line data
-      $app.handle_input data
   end
 end
 
