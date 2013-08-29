@@ -71,6 +71,10 @@ Say something in the room
 
     >> speak "Mr. Watson, come here, I want to see you"
 
+## TODO
+
+If you listen to a room, the only option you have is to CTRL+C to abort the program.  Need to figure out a nicer way to play with the listen method in the Tinder gem and its use of EventMachine.  Ideally the user would still see messages as they come in and would also have the ability to still type commands.
+
 ## Contributing
 
 1. Fork it
