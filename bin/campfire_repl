@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require 'campfire_repl'
+require 'time'  # tinder gem fails to require this in its room#recent method
+require 'eventmachine'
+
+class MyApp
+  attr_reader :campfire
+
+  def initialize options={}
+    @campfire = CampfireRepl::DSL.new(options)
+  end
+
+  def handle_input(input)
+    command, *params = input.scan /\w+|"[^"]*"/
+    params = params.map { |p| p.gsub '"', '' }
+    command = command.to_sym
+
+    if campfire.respond_to? command
+      if command == :listen
+        campfire.listen KeyboardHandler
+      else
+        campfire.send(command, *params)
+      end
+    else
+      puts "Unknown command: #{command}"
+    end
+  end
+
+  def start
+    repl = -> prompt do
+      print prompt
+      handle_input(STDIN.gets.chomp!)
+    end
+
+    loop do
+      repl[">> "]
+    end
+  end
+end
+
+module KeyboardHandler
+  include EM::Protocols::LineText2
+
+  def receive_line data
+      $app.handle_input data
+  end
+end
+
+if ARGV.size == 1
+  $app = MyApp.new config: ARGV[0]
+else
+  $app = MyApp.new
+end
+
+$app.start
+
