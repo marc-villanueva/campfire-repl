@@ -25,12 +25,14 @@ module CampfireRepl
 
       output "Login successful."
     end
+    alias :l :login
 
     def show_rooms
       client.rooms.each do |room|
         output "[green]#{room.id}[/]\t#{room.name}"
       end
     end
+    alias :sr :show_rooms
 
     def join_room room_id
       if room_id =~ /^\d+$/
@@ -41,6 +43,7 @@ module CampfireRepl
 
       output "Successfully joined room #{current_room.name}."
     end
+    alias :jr :join_room
 
     def listen
       current_room.listen do |m|
@@ -55,11 +58,14 @@ module CampfireRepl
     def show_recent_messages limit=10
       messages.process_messages current_room.recent(limit)
     end
+    alias :srm :show_recent_messages
+
 
     def leave_room
       current_room.leave
       self.current_room = nil
     end
+    alias :lr :leave_room
 
     def show_users
       output "Current users in room #{current_room.name}"
@@ -68,14 +74,17 @@ module CampfireRepl
           output "[green]#{user.id}[/]\t#{user.name}"
       end
     end
+    alias :su :show_users
 
     def speak message
       current_room.speak message
     end
+    alias :s :speak
 
     def quit
       Kernel.exit 0
     end
+    alias :q :quit
 
   private
 
