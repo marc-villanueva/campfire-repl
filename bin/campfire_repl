@@ -16,7 +16,21 @@ class MyApp
     command = command.to_sym
 
     if campfire.respond_to? command
-      campfire.send(command, *params)
+      if command == :listen
+        begin
+          campfire.listen
+        rescue HTTP::Parser::Error => e
+          # hack to get around Tinder throwing
+          # a error - "Could not parse data entirely"
+          puts "reconnecting"
+          sleep 0.25
+          system "clear"
+          campfire.show_recent_messages
+          handle_input "listen"
+        end
+      else
+        campfire.send command, *params
+      end
     else
       puts "Unknown command: #{command}"
     end
