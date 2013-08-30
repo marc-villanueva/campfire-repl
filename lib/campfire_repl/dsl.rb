@@ -7,13 +7,8 @@ module CampfireRepl
 
     attr_accessor :client, :current_room, :messages
 
-    def initialize options={}
+    def initialize
       self.messages = MessageProcessor.new
-
-      if options.has_key? :config
-        config = ConfigFile.new options[:config]
-        login *config.values
-      end
     end
 
     def login *args
@@ -59,7 +54,6 @@ module CampfireRepl
       messages.process_messages current_room.recent(limit)
     end
     alias :srm :show_recent_messages
-
 
     def leave_room
       current_room.leave

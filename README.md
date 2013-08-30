@@ -12,7 +12,7 @@ Fire up the REPL using the campfire_repl executable
 
     campfire_repl
 
-Instructions consist of the command to run first, followed by any parameters.  If one ofthe parameters has a space or non alphanumeric characters, enclose it in double quotes.
+Instructions consist of the command to run first, followed by any parameters.  If one ofthe parameters has a space or non alphanumeric characters, enclose it in double quotes.  Commands have aliases for easier typing.  They consist of the first letter of each word e.g. "show_users" becomes "su" and "join_room 123" becomes "jr 123".
 
     >> command arg1 "first_name.last_name" "my room"
 
@@ -29,16 +29,34 @@ You can also create a json file that contains your login info and pass that as a
 The contents of config.json should look like
 
     {
-      "account": "mysubdomain",
-      "token": "1234567890"
+      "account_info": {
+        "account": "mysubdomain",
+        "token": "1234567890"
+      }
     }
 
 or
 
     {
-      "account": "mysubdomain",
-      "username": "alexander.graham.bell",
-      "password": "teleph0n3"
+      "account_info": {
+        "account": "mysubdomain",
+        "username": "alexander.graham.bell",
+        "password": "teleph0n3"
+      }
+    }
+
+Your config file can also contain default steps to be run each time the REPL is started.  For example, if you wanted to join a specific room and show the current users in the room:
+
+    {
+      "account_info": {
+        "account": "mysubdomain",
+        "username": "alexander.graham.bell",
+        "password": "teleph0n3"
+      }
+      "default_steps": [
+        {"join_room": "My Room"},
+        {"show_users": ""}
+      ]
     }
 
 See what rooms are available

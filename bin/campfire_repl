@@ -7,10 +7,22 @@ class MyApp
   attr_reader :campfire
 
   def initialize options={}
-    @campfire = CampfireRepl::DSL.new(options)
+    @campfire = CampfireRepl::DSL.new
+
+    if options.has_key? :config
+      config = CampfireRepl::ConfigFile.new options[:config]
+      campfire.login *config["account_info"].values
+      perform_default config.fetch("default_steps", [])
+    end
   end
 
-  def handle_input(input)
+  def perform_default steps
+    steps.each do |step|
+      handle_input "#{step.keys.first} #{step.values.first}".chomp
+    end
+  end
+
+  def handle_input input
     command, *params = input.scan /\w+|"[^"]*"/
     params = params.map { |p| p.gsub '"', '' }
     command = command.to_sym
@@ -39,7 +51,7 @@ class MyApp
   def start
     repl = -> prompt do
       print prompt
-      handle_input(STDIN.gets.chomp!)
+      handle_input STDIN.gets.chomp!
     end
 
     loop do

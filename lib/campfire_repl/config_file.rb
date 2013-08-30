@@ -7,11 +7,11 @@ module CampfireRepl
     end
 
     def [](key)
-      @config.fetch(key, "")
+      @config.fetch(key.to_s, "")
     end
 
-    def values
-      @config.values
+    def fetch(key, default)
+      @config.fetch(key.to_s, default)
     end
   end
 

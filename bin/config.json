@@ -1,4 +1,10 @@
 {
-  "account": "yoursubdomain",
-  "token": "your api token"
+  "account_info": {
+    "account": "yoursubdomain",
+    "token": "your api token"
+  },
+  "default_steps": [
+      {"join_room": "My Room"},
+      {"show_users": ""},
+  ]
 }
