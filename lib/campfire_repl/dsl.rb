@@ -41,6 +41,8 @@ module CampfireRepl
     alias :jr :join_room
 
     def listen
+      output "Listening in room #{current_room.name}."
+
       current_room.listen do |m|
         messages.process_messages [m]
       end
@@ -51,6 +53,9 @@ module CampfireRepl
     end
 
     def show_recent_messages limit=10
+      output "#{limit} most recent messages in room #{current_room.name}."
+      output "-------------------------"
+
       messages.process_messages current_room.recent(limit)
     end
     alias :srm :show_recent_messages
@@ -63,6 +68,7 @@ module CampfireRepl
 
     def show_users
       output "Current users in room #{current_room.name}"
+      output "-------------------------"
 
       current_room.users.each do |user|
           output "[green]#{user.id}[/]\t#{user.name}"

@@ -4,33 +4,32 @@ module CampfireRepl
 
   class MessageProcessor
 
-    attr_reader :processors
+    def message_colors= value
+      @message_colors = value
+    end
 
-    def initialize
-      @processors = [TextMessage.new, PasteMessage.new, EnterMessage.new, LeaveMessage.new]
-      @all_colors = ["red", "green", "yellow", "blue", "magenta", "purple", "cyan", "white", "light_red",
-                     "light_green", "light_yellow", "light_blue", "light_magenta", "light_purple", "light_cyan"]
-      @available_colors = @all_colors.dup
-      @user_colors = {}
+    def message_colors
+      @message_colors ||= OutputColors.new
+    end
+
+    def processors= value
+      @processors = value
+    end
+
+    def processors
+      @processors ||= [TextMessage.new, PasteMessage.new, EnterMessage.new, LeaveMessage.new]
     end
 
     def process_messages messages
       messages.each do |m|
         processors.each do |p|
           if p.applies_to? m
-            p.process m, get_color(m.user)
+            p.process m, message_colors[m.user.id]
           end
         end
       end
     end
 
-    def get_color user
-      color = @user_colors.fetch(user.id, @available_colors.pop)
-      @user_colors[user.id] = color
-      @available_colors = @all_colors.dup if @available_colors.empty?
-
-      color
-    end
   end
 
   class TextMessage
